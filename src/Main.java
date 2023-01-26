@@ -1,16 +1,29 @@
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args){
 
-        try (TestStream testStream = new TestStream()) { //Открыли ресурс
-            System.out.println("Выполняем запись данных"); // Поработали с ресурсом
+        try (FileWriter writer = new FileWriter("test.txt", true)) {
+            String text = "Hello World!\nHello World!\nHello World!\nHello World!\nHello World!\n";
+            writer.write(text);
+            writer.flush();
+            System.out.println("Файл успешно создан");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        // После чего автоматически его закрыли
+        try (FileReader reader = new FileReader("test.txt")) { // Необходимо добавить полный путь до файла
+            System.out.println("Чтение файла:");
+            int c;
+
+            while ((c = reader.read()) != -1) {
+                System.out.print((char) c);
+            }
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
